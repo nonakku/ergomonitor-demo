@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RULAとは？ - ErgoMonitorMR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f3f7f4;
+            --surface: #ffffff;
+            --border: #d9e6dc;
+            --text: #1f2a24;
+            --muted: #5f6b64;
+            --green: #1f8a5b;
+            --green-strong: #146944;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        .header {
+            background: var(--green);
+            color: #f6fff9;
+            text-align: center;
+            padding: 1.2rem 1rem;
+        }
+        .header h1 {
+            font-size: 1.4rem;
+            margin-bottom: 0.3rem;
+        }
+        .header p {
+            font-size: 0.9rem;
+            color: #e2f4ea;
+        }
+        .container {
+            max-width: 820px;
+            margin: 1.2rem auto 2rem;
+            padding: 0 1rem;
+        }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem 1.4rem;
+            margin-bottom: 1rem;
+        }
+        .card h2 {
+            font-size: 1.05rem;
+            color: var(--green-strong);
+            margin-bottom: 0.6rem;
+        }
+        .card p {
+            line-height: 1.7;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .card ul {
+            margin-top: 0.5rem;
+            padding-left: 1.1rem;
+        }
+        .card li {
+            margin: 0.25rem 0;
+            color: var(--text);
+        }
+        .formula {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            background: #f4f8f5;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            margin-top: 0.6rem;
+            font-size: 0.9rem;
+        }
+        .link {
+            color: var(--green-strong);
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--muted);
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>RULAとは？（簡易説明）</h1>
+        <p>このデモで採用している評価の考え方と計算根拠</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <p><a class="link" href="index.html">← デモに戻る</a></p>
+        </div>
+        <div class="card">
+            <h2>RULAの概要</h2>
+            <p>RULA（Rapid Upper Limb Assessment）は、首・肩・腕・手首など上肢を中心に、作業姿勢の負担を短時間で評価する観察手法です。現場での姿勢改善やリスクの見える化に使われます。</p>
+        </div>
+
+        <div class="card">
+            <h2>このデモでの位置づけ</h2>
+            <p>本デモはRULAの考え方を参考にした<strong>簡易版</strong>です。厳密なRULA計算ではなく、姿勢の傾向を直感的に理解することを目的としています。</p>
+        </div>
+
+        <div class="card">
+            <h2>スコアの考え方（簡易式）</h2>
+            <p>負荷レベルは「体幹の負担点数」から「膝の軽減点数」を引き、0〜100に丸めた値です。</p>
+            <div class="formula">負荷レベル = 体幹の負担点数 − 膝の軽減点数（0〜100に丸める）</div>
+            <div class="formula">スコア = 100 − 負荷レベル</div>
+        </div>
+
+        <div class="card">
+            <h2>点数の決め方（このデモの設定）</h2>
+            <ul>
+                <li>体幹の負担点数: 体幹角度が15°未満=0点、30°未満=30点、45°未満=60点、45°以上=100点</li>
+                <li>膝の軽減点数: 膝角度が120°未満=20点、150°未満=10点、それ以上=0点</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>参考リンク</h2>
+            <p><a class="link" href="https://ergo.human.cornell.edu/ahRULA.html" target="_blank" rel="noopener">RULA (Rapid Upper Limb Assessment)</a></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        ErgoMonitorMR - RULA説明ページ
+    </div>
+</body>
+</html>
