@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RULA 従業員評価ワークシート</title>
+<style>
+  body { font-family: sans-serif; background-color: #f5f6f8; margin: 0; padding: 20px; font-size: 12px; }
+  .header-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .container { display: flex; gap: 15px; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
+  .column { background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex: 1; padding: 15px; }
+  .col-center { flex: 1.2; background: transparent; box-shadow: none; padding: 0; display: flex; flex-direction: column; gap: 15px; }
+  
+  .section-header { background-color: #5c6b8c; color: white; padding: 8px; text-align: center; font-weight: bold; border-radius: 4px; margin-bottom: 15px; }
+  
+  .step-box { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+  .step-title { font-weight: bold; font-size: 14px; margin-bottom: 5px; }
+  select, input[type="number"] { width: 100%; padding: 6px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 4px; }
+  .checkbox-label { display: block; margin-bottom: 3px; font-size: 11px; }
+  
+  .score-box-container { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 5px; }
+  .score-box { width: 40px; height: 30px; border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+  
+  table { width: 100%; border-collapse: collapse; text-align: center; font-size: 10px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
+  th, td { border: 1px solid #ddd; padding: 4px; }
+  .th-dark { background-color: #5c6b8c; color: white; }
+  .th-light { background-color: #e0e6ed; }
+  
+  .highlight { background-color: #ffeb3b !important; color: #d32f2f; font-weight: bold; box-shadow: inset 0 0 0 2px #d32f2f; }
+  
+  .final-score-area { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; }
+  .final-table { width: 100%; margin-bottom: 15px; font-size: 12px; }
+  .final-table td { padding: 8px; text-align: left; }
+  .final-score-display { width: 80px; height: 60px; background-color: #5c6cf2; color: white; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; margin: 0 auto; border-radius: 4px;}
+</style>
+</head>
+<body>
+
+<div class="header-title">
+  RULA 従業員評価ワークシート
+</div>
+
+<div class="container">
+  <div class="column">
+    <div class="section-header">A. 腕と手首の分析</div>
+    
+    <div class="step-box">
+      <div class="step-title">ステップ 1: 上腕の姿勢を確認する</div>
+      <select id="a1" onchange="calcRULA()">
+        <option value="1">20°以内 (+1)</option>
+        <option value="2">20°超の伸展 または 20-45°の屈曲 (+2)</option>
+        <option value="3">45-90°の屈曲 (+3)</option>
+        <option value="4">90°以上の屈曲 (+4)</option>
+      </select>
+      <div class="step-title" style="font-size:12px; margin-top:5px;">ステップ 1a: 調整...</div>
+      <label class="checkbox-label"><input type="checkbox" id="a1_adj1" onchange="calcRULA()"> 肩が上がっている (+1)</label>
+      <label class="checkbox-label"><input type="checkbox" id="a1_adj2" onchange="calcRULA()"> 外転している（脇が開いている） (+1)</label>
+      <label class="checkbox-label"><input type="checkbox" id="a1_adj3" onchange="calcRULA()"> 腕が支えられている/寄りかかっている (-1)</label>
+      <div class="score-box-container">上腕スコア <div class="score-box" id="box_upper">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 2: 前腕の姿勢を確認する</div>
+      <select id="a2" onchange="calcRULA()">
+        <option value="1">60-100° (+1)</option>
+        <option value="2">0-60° または 100°以上 (+2)</option>
+      </select>
+      <div class="step-title" style="font-size:12px; margin-top:5px;">ステップ 2a: 調整...</div>
+      <label class="checkbox-label"><input type="checkbox" id="a2_adj" onchange="calcRULA()"> 正中線を越える、または体の外側で作業 (+1)</label>
+      <div class="score-box-container">前腕スコア <div class="score-box" id="box_lower">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 3: 手首の姿勢を確認する</div>
+      <select id="a3" onchange="calcRULA()">
+        <option value="1">中立姿勢 0° (+1)</option>
+        <option value="2">15°以内 (+2)</option>
+        <option value="3">15°以上 (+3)</option>
+      </select>
+      <div class="step-title" style="font-size:12px; margin-top:5px;">ステップ 3a: 調整...</div>
+      <label class="checkbox-label"><input type="checkbox" id="a3_adj" onchange="calcRULA()"> 手首が正中線から曲がっている (+1)</label>
+      <div class="score-box-container">手首スコア <div class="score-box" id="box_wrist">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 4: 手首のひねり</div>
+      <select id="a4" onchange="calcRULA()">
+        <option value="1">可動域の中間 (+1)</option>
+        <option value="2">可動域の端に近い (+2)</option>
+      </select>
+      <div class="score-box-container">手首ひねりスコア <div class="score-box" id="box_twist">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 5: Table Aから姿勢スコアを特定する</div>
+      <div class="score-box-container">姿勢スコアA <div class="score-box" id="box_scoreA">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 6: 筋肉の使用スコアを加算する</div>
+      <select id="a6" onchange="calcRULA()">
+        <option value="0">動的 / 頻度が低い (+0)</option>
+        <option value="1">静的(1分以上保持) または 反復(4回/分以上) (+1)</option>
+      </select>
+      <div class="score-box-container">筋肉の使用スコア <div class="score-box" id="box_muscA">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 7: 荷重/負荷スコアを加算する</div>
+      <select id="a7" onchange="calcRULA()">
+        <option value="0">2kg未満 (断続的) (+0)</option>
+        <option value="1">2kg - 10kg (断続的) (+1)</option>
+        <option value="2">2kg - 10kg (静的/反復) (+2)</option>
+        <option value="3">10kg以上、または繰り返しの衝撃 (+3)</option>
+      </select>
+      <div class="score-box-container">荷重/負荷スコア <div class="score-box" id="box_frcA">-</div></div>
+    </div>
+
+    <div class="step-box" style="border:none;">
+      <div class="step-title">ステップ 8: Table Cの行を特定する</div>
+      <div class="score-box-container">手首・腕スコア <div class="score-box" style="background:#e0e0ff;" id="box_finalA">-</div></div>
+    </div>
+  </div>
+
+  <div class="col-center">
+    <div class="section-header">スコア表</div>
+    <div id="tableA-container"></div>
+    <div id="tableC-container"></div>
+    
+    <div class="final-score-area">
+      <div class="section-header" style="background:#5c6cf2; margin-bottom: 0;">RULA 判定 (Table Cからの最終スコア)</div>
+      <table class="final-table" style="box-shadow:none; margin-top: 0;">
+        <tr><th style="width:50px; background:#e0e0ff;">1 または 2</th><td>許容できる姿勢</td></tr>
+        <tr><th style="background:#e0e0ff;">3 または 4</th><td>さらなる調査が必要。改善が必要な場合がある</td></tr>
+        <tr><th style="background:#e0e0ff;">5 または 6</th><td>さらなる調査が必要。すぐに改善が必要</td></tr>
+        <tr><th style="background:#e0e0ff;">7</th><td>調査を行い、直ちに改善を実装すること</td></tr>
+      </table>
+      <div style="font-weight:bold; margin-bottom:5px;">RULA スコア</div>
+      <div class="final-score-display" id="final_rula_score">-</div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="section-header">B. 首、体幹、脚の分析</div>
+    
+    <div class="step-box">
+      <div class="step-title">ステップ 9: 首の姿勢を確認する</div>
+      <select id="b9" onchange="calcRULA()">
+        <option value="1">0-10° (+1)</option>
+        <option value="2">10-20° (+2)</option>
+        <option value="3">20°以上 (+3)</option>
+        <option value="4">伸展 (+4)</option>
+      </select>
+      <div class="step-title" style="font-size:12px; margin-top:5px;">ステップ 9a: 調整...</div>
+      <label class="checkbox-label"><input type="checkbox" id="b9_adj1" onchange="calcRULA()"> 首がひねられている (+1)</label>
+      <label class="checkbox-label"><input type="checkbox" id="b9_adj2" onchange="calcRULA()"> 首が横に曲がっている (+1)</label>
+      <div class="score-box-container">首スコア <div class="score-box" id="box_neck">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 10: 体幹の姿勢を確認する</div>
+      <select id="b10" onchange="calcRULA()">
+        <option value="1">直立 0° (+1)</option>
+        <option value="2">0-20° (+2)</option>
+        <option value="3">20-60° (+3)</option>
+        <option value="4">60°以上 (+4)</option>
+      </select>
+      <div class="step-title" style="font-size:12px; margin-top:5px;">ステップ 10a: 調整...</div>
+      <label class="checkbox-label"><input type="checkbox" id="b10_adj1" onchange="calcRULA()"> 体幹がひねられている (+1)</label>
+      <label class="checkbox-label"><input type="checkbox" id="b10_adj2" onchange="calcRULA()"> 体幹が横に曲がっている (+1)</label>
+      <div class="score-box-container">体幹スコア <div class="score-box" id="box_trunk">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 11: 脚の状態</div>
+      <select id="b11" onchange="calcRULA()">
+        <option value="1">脚と足が支えられている (+1)</option>
+        <option value="2">支えられていない (+2)</option>
+      </select>
+      <div class="score-box-container">脚スコア <div class="score-box" id="box_leg">-</div></div>
+    </div>
+
+    <div id="tableB-container" style="margin-bottom: 15px;"></div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 12: Table Bから姿勢スコアを特定する</div>
+      <div class="score-box-container">姿勢スコアB <div class="score-box" id="box_scoreB">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 13: 筋肉の使用スコアを加算する</div>
+      <select id="b13" onchange="calcRULA()">
+        <option value="0">動的 / 頻度が低い (+0)</option>
+        <option value="1">静的(1分以上保持) または 反復(4回/分以上) (+1)</option>
+      </select>
+      <div class="score-box-container">筋肉の使用スコア <div class="score-box" id="box_muscB">-</div></div>
+    </div>
+
+    <div class="step-box">
+      <div class="step-title">ステップ 14: 荷重/負荷スコアを加算する</div>
+      <select id="b14" onchange="calcRULA()">
+        <option value="0">2kg未満 (断続的) (+0)</option>
+        <option value="1">2kg - 10kg (断続的) (+1)</option>
+        <option value="2">2kg - 10kg (静的/反復) (+2)</option>
+        <option value="3">10kg以上、または繰り返しの衝撃 (+3)</option>
+      </select>
+      <div class="score-box-container">荷重/負荷スコア <div class="score-box" id="box_frcB">-</div></div>
+    </div>
+
+    <div class="step-box" style="border:none;">
+      <div class="step-title">ステップ 15: Table Cの列を特定する</div>
+      <div class="score-box-container">首・体幹・脚スコア <div class="score-box" style="background:#e0ffff;" id="box_finalB">-</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// マトリックスデータ
+const tableA_data = [
+  [[[1,2],[2,2],[2,3],[3,3]], [[2,2],[2,2],[3,3],[3,3]], [[2,3],[3,3],[3,3],[4,4]]],
+  [[[2,3],[3,3],[3,4],[4,4]], [[3,3],[3,3],[3,4],[4,4]], [[3,4],[4,4],[4,4],[5,5]]],
+  [[[3,3],[4,4],[4,4],[5,5]], [[3,4],[4,4],[4,4],[5,5]], [[4,4],[4,4],[4,5],[5,5]]],
+  [[[4,4],[4,4],[4,5],[5,5]], [[4,4],[4,4],[4,5],[5,5]], [[4,4],[4,5],[5,5],[6,6]]],
+  [[[5,5],[5,5],[5,6],[6,7]], [[5,6],[6,6],[6,7],[7,7]], [[6,6],[6,7],[7,7],[7,8]]],
+  [[[7,7],[7,7],[7,8],[8,9]], [[8,8],[8,8],[8,9],[9,9]], [[9,9],[9,9],[9,9],[9,9]]]
+];
+const tableB_data = [
+  [[1,3],[2,3],[3,4],[5,5],[6,6],[7,7]],
+  [[2,3],[2,3],[4,5],[5,5],[6,7],[7,7]],
+  [[3,3],[3,4],[4,5],[5,6],[6,7],[7,7]],
+  [[5,5],[5,6],[6,7],[7,7],[7,7],[8,8]],
+  [[7,7],[7,7],[7,8],[8,8],[8,8],[8,8]],
+  [[8,8],[8,8],[8,8],[8,9],[9,9],[9,9]]
+];
+const tableC_data = [
+  [1,2,3,3,4,5,5], [2,2,3,4,4,5,5], [3,3,3,4,4,5,6], [3,3,3,4,5,6,6],
+  [4,4,4,5,6,7,7], [4,4,5,6,6,7,7], [5,5,6,6,7,7,7], [5,5,6,7,7,7,7]
+];
+
+// テーブルAの生成
+let htmlA = '<table style="border-collapse: collapse; width: 100%; font-size: 11px;">';
+htmlA += '<tr><th rowspan="2" colspan="2" style="background:#788496; color:white; border:1px solid #fff;">Table A</th>';
+htmlA += '<th colspan="8" style="background:#4a5568; color:white; border:1px solid #fff;">手首の姿勢スコア</th></tr>';
+htmlA += '<tr><th colspan="2" style="background:#4a5568; color:white; border:1px solid #fff;">1</th><th colspan="2" style="background:#4a5568; color:white; border:1px solid #fff;">2</th><th colspan="2" style="background:#4a5568; color:white; border:1px solid #fff;">3</th><th colspan="2" style="background:#4a5568; color:white; border:1px solid #fff;">4</th></tr>';
+htmlA += '<tr><th rowspan="2" style="background:#2b78e4; color:white; border:1px solid #fff;">上腕</th><th rowspan="2" style="background:#38c973; color:white; border:1px solid #fff;">前腕</th>';
+for(let i=0; i<4; i++) htmlA += '<th colspan="2" style="background:#c44285; color:white; border:1px solid #fff;">手首ひねり</th>';
+htmlA += '</tr><tr>';
+for(let i=0; i<4; i++) htmlA += '<th style="background:#c44285; color:white; border:1px solid #fff;">1</th><th style="background:#c44285; color:white; border:1px solid #fff;">2</th>';
+htmlA += '</tr>';
+for(let u=1; u<=6; u++) {
+  for(let l=1; l<=3; l++) {
+    htmlA += '<tr>';
+    if(l===1) htmlA += `<th rowspan="3" style="background:#2b78e4; color:white; border:1px solid #fff;">${u}</th>`;
+    htmlA += `<th style="background:#38c973; color:white; border:1px solid #fff;">${l}</th>`;
+    for(let w=1; w<=4; w++) {
+      for(let t=1; t<=2; t++) {
+        htmlA += `<td id="ta_${u}_${l}_${w}_${t}" style="border:1px solid #ddd; background:#f4f4f4;">${tableA_data[u-1][l-1][w-1][t-1]}</td>`;
+      }
+    }
+    htmlA += '</tr>';
+  }
+}
+htmlA += '</table>';
+document.getElementById('tableA-container').innerHTML = htmlA;
+
+// テーブルBの生成
+let htmlB = '<table style="border-collapse: collapse; width: 100%; font-size: 11px;">';
+htmlB += '<tr><th rowspan="2" style="background:#788496; color:white; border:1px solid #fff;">Table B</th>';
+htmlB += '<th colspan="12" style="background:#e67e22; color:white; border:1px solid #fff;">体幹の姿勢スコア</th></tr>';
+htmlB += '<tr>';
+for(let t=1; t<=6; t++) htmlB += `<th colspan="2" style="background:#e67e22; color:white; border:1px solid #fff;">${t}</th>`;
+htmlB += '</tr><tr>';
+htmlB += '<th rowspan="2" style="background:#c0392b; color:white; border:1px solid #fff;">首の<br>姿勢<br>スコア</th>';
+for(let t=1; t<=6; t++) htmlB += '<th colspan="2" style="background:#f1c40f; color:white; border:1px solid #fff;">脚</th>';
+htmlB += '</tr><tr>';
+for(let t=1; t<=6; t++) htmlB += '<th style="background:#f1c40f; color:white; border:1px solid #fff;">1</th><th style="background:#f1c40f; color:white; border:1px solid #fff;">2</th>';
+htmlB += '</tr>';
+for(let n=1; n<=6; n++) {
+  htmlB += `<tr><th style="background:#c0392b; color:white; border:1px solid #fff;">${n}</th>`;
+  for(let t=1; t<=6; t++) {
+    for(let l=1; l<=2; l++) {
+      htmlB += `<td id="tb_${n}_${t}_${l}" style="border:1px solid #ddd; background:#f4f4f4;">${tableB_data[n-1][t-1][l-1]}</td>`;
+    }
+  }
+  htmlB += '</tr>';
+}
+htmlB += '</table>';
+document.getElementById('tableB-container').innerHTML = htmlB;
+
+// テーブルCの生成 (colspan="2"の指定を修正)
+let htmlC = '<table style="border-collapse: collapse; width: 100%; font-size: 11px;">';
+htmlC += '<tr><th rowspan="2" colspan="2" style="background:#788496; color:white; border:1px solid #fff;">Table C</th>';
+htmlC += '<th colspan="7" style="background:#16a085; color:white; border:1px solid #fff;">首、体幹、脚スコア</th></tr>';
+htmlC += '<tr>';
+for(let i=1; i<=6; i++) htmlC += `<th style="background:#16a085; color:white; border:1px solid #fff;">${i}</th>`;
+htmlC += '<th style="background:#16a085; color:white; border:1px solid #fff;">7+</th></tr>';
+for(let r=1; r<=8; r++) {
+  htmlC += '<tr>';
+  if(r===1) htmlC += '<th rowspan="8" style="background:#4a235a; color:white; border:1px solid #fff;">手首<br>・<br>腕<br>スコア</th>';
+  htmlC += `<th style="background:#6c3483; color:white; border:1px solid #fff;">${r === 8 ? '8+' : r}</th>`;
+  for(let c=1; c<=7; c++) {
+    htmlC += `<td id="tc_${r}_${c}" style="border:1px solid #ddd; background:#f4f4f4;">${tableC_data[r-1][c-1]}</td>`;
+  }
+  htmlC += '</tr>';
+}
+htmlC += '</table>';
+document.getElementById('tableC-container').innerHTML = htmlC;
+
+// 計算とハイライト処理
+function getV(id) {
+  const el = document.getElementById(id);
+  if(el.type === 'checkbox') return el.checked ? 1 : 0;
+  return parseInt(el.value);
+}
+
+function calcRULA() {
+  let upper = Math.max(1, Math.min(6, getV('a1') + getV('a1_adj1') + getV('a1_adj2') - getV('a1_adj3')));
+  document.getElementById('box_upper').innerText = upper;
+  
+  let lower = Math.max(1, Math.min(3, getV('a2') + getV('a2_adj')));
+  document.getElementById('box_lower').innerText = lower;
+  
+  let wrist = Math.max(1, Math.min(4, getV('a3') + getV('a3_adj')));
+  document.getElementById('box_wrist').innerText = wrist;
+  
+  let twist = getV('a4');
+  document.getElementById('box_twist').innerText = twist;
+
+  let scoreA = tableA_data[upper-1][lower-1][wrist-1][twist-1];
+  document.getElementById('box_scoreA').innerText = scoreA;
+
+  let muscA = getV('a6'); document.getElementById('box_muscA').innerText = muscA;
+  let frcA = getV('a7');  document.getElementById('box_frcA').innerText = frcA;
+  let finalA = scoreA + muscA + frcA;
+  document.getElementById('box_finalA').innerText = finalA;
+
+  let neck = Math.max(1, Math.min(6, getV('b9') + getV('b9_adj1') + getV('b9_adj2')));
+  document.getElementById('box_neck').innerText = neck;
+
+  let trunk = Math.max(1, Math.min(6, getV('b10') + getV('b10_adj1') + getV('b10_adj2')));
+  document.getElementById('box_trunk').innerText = trunk;
+
+  let leg = getV('b11');
+  document.getElementById('box_leg').innerText = leg;
+
+  let scoreB = tableB_data[neck-1][trunk-1][leg-1];
+  document.getElementById('box_scoreB').innerText = scoreB;
+
+  let muscB = getV('b13'); document.getElementById('box_muscB').innerText = muscB;
+  let frcB = getV('b14');  document.getElementById('box_frcB').innerText = frcB;
+  let finalB = scoreB + muscB + frcB;
+  document.getElementById('box_finalB').innerText = finalB;
+
+  document.querySelectorAll('td').forEach(td => td.classList.remove('highlight'));
+  
+  document.getElementById(`ta_${upper}_${lower}_${wrist}_${twist}`).classList.add('highlight');
+  document.getElementById(`tb_${neck}_${trunk}_${leg}`).classList.add('highlight');
+  
+  let idxA = Math.max(1, Math.min(8, finalA));
+  let idxB = Math.max(1, Math.min(7, finalB));
+  document.getElementById(`tc_${idxA}_${idxB}`).classList.add('highlight');
+  
+  document.getElementById('final_rula_score').innerText = tableC_data[idxA-1][idxB-1];
+}
+
+window.onload = calcRULA;
+</script>
+</body>
+</html>
